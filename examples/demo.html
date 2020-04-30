@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>MultiPage</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+
+	<script src="../libs/three.min.js"></script>
+	<script src="../libs/dwv-0.10.1.min.js"></script>
+	<script src="../libs/dicom.min.js"></script>
+	<!-- <script src="../src/utilities/webglContext.js"></script>
+	<script src="../src/utilities/mouse.js"></script>
+	<script src="../src/utilities/path.js"></script>
+	<script src="../src/observableData.js"></script>
+	<script src="../src/attachedObject.js"></script>
+	<script src="../src/attachedObjectCollection.js"></script>
+	<script src="../src/shader.js"></script>
+	<script src="../src/dcmSeries.js"></script>
+	<script src="../src/viewer.js"></script>
+	<script src="../src/generateGrid.js"></script>
+	<script src="../src/pane.js"></script>
+	<script src="../src/selection.js"></script>
+	<script src="../src/behaviors/behavior.js"></script>
+	<script src="../src/behaviors/compositeBehavior.js"></script>
+	<script src="../src/behaviors/mouseBehaviors/capturedMouseBehavior.js"></script>
+	<script src="../src/behaviors/mouseBehaviors/buttonCapturedMouseBehavior.js"></script>
+	<script src="../src/behaviors/mouseBehaviors/WWWLBehavior.js"></script>
+	<script src="../src/behaviors/mouseBehaviors/selectBehavior.js"></script>
+	<script src="../src/behaviors/mouseBehaviors/selectShapeBehavior.js"></script>
+	<script src="../src/behaviors/mouseBehaviors/zoomBehavior.js"></script>
+	<script src="../src/behaviors/mouseBehaviors/panBehavior.js"></script>
+	<script src="../src/behaviors/mouseBehaviors/pageBehavior.js"></script>
+	<script src="../src/behaviors/mouseBehaviors/wheelPageBehavior.js"></script>
+	<script src="../src/shapes/line.js"></script>
+	<script src="../src/behaviors/mouseBehaviors/insertLineBehavior.js"></script>
+	<script src="../src/behaviors/mouseBehaviors/pixelInfoBehavior.js"></script>
+	<script src="../src/behaviors/touchBehaviors/WWWLBehavior.js"></script>
+	<script src="../src/behaviors/touchBehaviors/zoomBehavior.js"></script>
+	<script src="../src/behaviors/touchBehaviors/panBehavior.js"></script>
+	<script src="../src/behaviors/behaviorHelper.js"></script>
+	<script src="../src/commands/command.js"></script>
+	<script src="../src/commands/rotateCommand.js"></script>
+	<script src="../src/commands/flipCommand.js"></script>
+	<script src="../src/commands/commandHelper.js"></script>
+	<script src="../src/overlays/overlay.js"></script>
+	<script src="../src/overlays/cornerInfoOverlay.js"></script>
+	<script src="../src/overlays/scaleOverlay.js"></script>
+	<script src="../src/overlays/shapeOverlay.js"></script>
+	<script src="../src/overlays/topOverlay.js"></script>
+	<script src="../src/application.js"></script>
+	<script src="../src/viewerFactory.js"></script> -->
+
+	<style>
+		#container {
+			background: white;
+			top: 6rem;
+			left: 0px;
+			right: 0px;
+			bottom: 0px;
+			position: absolute;
+			font-size: 10px;
+		}
+
+		#toolbar {
+			background: gray;
+			top: 0px;
+			left: 0px;
+			right: 0px;
+			height: 6rem;
+			position: absolute;
+			padding: 0;
+		}
+
+		div {
+			color: white;
+		}
+
+		button {
+			padding: 0;
+			height: 3em;
+
+			width: 6em;
+			margin: 0;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="toolbar">
+		<button id="default">Default</button>
+		<button id="wwwl">WWWL</button>
+		<button id="pan">Pan</button>
+		<button id="zoom">Zoom</button>
+		<button id="page">Page</button>
+		<button id="pixel">Pixel</button>
+		<button id="line">Line</button>
+		<button id="rotate0">Rotate0</button>
+		<button id="rotate1">Rotate1</button>
+		<button id="flip0">Flip0</button>
+		<button id="flip1">Flip1</button>
+		<button id='split3'>3X3</button>
+		<button id='split1'>1X1</button>
+		<button id='setWL'>SetWL</button>
+		<button id='setWL1'>SetWL1</button>
+		<button id='setWL2'>SetWL2</button>
+	</div>
+
+	<div id="container"></div>
+
+
+	<script>
+		var application = new DICOM.Application();
+		var viewer = application.createViewer("container");
+		//  viewer.split(1,1);
+
+		// application.viewers.add(viewer);
+
+		//实际使用中需要需要当application准备好了，再是按键enable.
+		document.querySelector("#default").onclick = function (e) {
+			application.behaviorID.value = 'default';
+		};
+
+		document.querySelector("#wwwl").onclick = function (e) {
+			application.behaviorID.value = 'WWWL';
+		};
+
+		document.querySelector("#pan").onclick = function (e) {
+			application.behaviorID.value = 'pan';
+		};
+
+		document.querySelector("#zoom").onclick = function (e) {
+			application.behaviorID.value = 'zoom';
+		};
+
+		document.querySelector("#page").onclick = function (e) {
+			application.behaviorID.value = 'page';
+		};
+
+		document.querySelector('#pixel').onclick = function (e) {
+			application.behaviorID.value = 'pixel';
+		};
+
+		document.querySelector("#line").onclick = function (e) {
+			application.behaviorID.value = 'line';
+		}
+
+		document.querySelector("#rotate0").onclick = function (e) {
+			application.executeByID({ type: 'rotate', arguments: Math.PI * 0.5 });
+		};
+
+		document.querySelector("#rotate1").onclick = function (e) {
+			application.executeByID({ type: 'rotate', arguments: -Math.PI * 0.5 });
+		};
+
+		document.querySelector("#flip0").onclick = function (e) {
+			application.executeByID({ type: 'flip', arguments: 'x' });
+		};
+
+		document.querySelector("#flip1").onclick = function (e) {
+			application.executeByID({ type: 'flip', arguments: 'y' });
+		};
+
+		document.querySelector("#split3").onclick = function (e) {
+			application.getCurrentViewer().split(3, 3);
+		}
+
+		document.querySelector("#split1").onclick = function (e) {
+			application.getCurrentViewer().split(1, 1);
+		}
+
+		document.querySelector("#setWL").onclick = function (e) {
+			application.setWWWL(400, 150);
+		}
+
+		document.querySelector("#setWL1").onclick = function (e) {
+			application.setWWWL(100, 400);
+		}
+
+		document.querySelector("#setWL2").onclick = function (e) {
+			application.setWWWL(200, 500);
+		}
+
+		var dcmSeries = new DICOM.DcmSeries();
+		viewer.loadDcmSeries(dcmSeries);
+
+		var init = false;
+		for (var i = 281; i <= 560; ++i) {
+			var url = "../data/0000000039/400001.2/CT.1.2.392.200036.9116.2.1221418485.1277952568.885215.2." + i + ".dcm";
+			var request = new XMLHttpRequest();
+			request.open("GET", url, true);
+			request.responseType = "arraybuffer";
+
+			request.onload = function (event) {
+				dcmSeries.appendDcmArrayBuffer(this.response);
+			}
+
+			request.send(null);
+		}
+
+		var animate = function () {
+			requestAnimationFrame(animate);
+			application.render();
+		}
+
+		animate();
+	</script>
+
+</body>
+
+</html>

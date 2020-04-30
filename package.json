@@ -1,0 +1,26 @@
+{
+  "name": "dicom.js",
+  "version": "1.0.0",
+  "description": "1.只有在支持Html5的canvas和webgl的浏览器中才能正确的运行",
+  "main": "server.js",
+  "directories": {
+    "doc": "docs",
+    "example": "examples"
+  },
+  "dependencies": {
+    "express": "^4.13.3",
+    "serve-index": "^1.7.2",
+    "uglify-js": "^3.9.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@git.coding.net:matazure/dicom.js.git"
+  },
+  "author": "zhang zhimin",
+  "license": "ISC"
+}
