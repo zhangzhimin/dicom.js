@@ -28,12 +28,11 @@ DICOM.Viewer = function(container, options) {
         self.dispatchEvent(e);
     });
 
-    this.container.oncontextmenu =
-        function(e) {
+    this.container.oncontextmenu = function(e) {
         e.preventDefault();
-    }
+    };
 
-        self.init = false;
+    self.init = false;
 };
 
 DICOM.AttachedObject.prototype.apply(DICOM.Viewer.prototype);
@@ -57,19 +56,21 @@ DICOM.Viewer.prototype.render = function() {
             self.renderer = new THREE.WebGLRenderer({antialias: true});
             self.renderer.autoClear = false;
 
-            var viewerWidth = self.container.clientWidth;
-            var viewerHeight = self.container.clientHeight;
-            self.renderer.setSize(viewerWidth, viewerHeight);
-            self.renderer.getPrecision('highh');
-
             self.addEventListener('resize', function(e) {
                 var viewer = e.target;
+                console.log(viewer.container.clientHeight);
                 viewer.renderer.setSize(
                     viewer.container.clientWidth, viewer.container.clientHeight);
             });
 
             self.renderer.setPixelRatio(window.devicePixelRatio);
             self.container.appendChild(self.renderer.domElement);
+
+            var viewerWidth = self.container.clientWidth;
+            var viewerHeight = self.container.clientHeight;
+            console.log(viewerHeight);
+            self.renderer.setSize(viewerWidth, viewerHeight);
+            self.renderer.getPrecision('highh');
 
             // self.split(1,1);
 
@@ -122,7 +123,6 @@ DICOM.Viewer.prototype.split = function(column, row) {
                 pane.overlays.add(shapeOverlay);
             });
         }
-
     });
 
     customEvent.newPanes = this.panes;
