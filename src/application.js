@@ -108,6 +108,11 @@ DICOM.Application.prototype = {
 
     getCurrentViewer: function() {
         var selectionPane = this.paneSelection._selectedItem;
-        return selectionPane.viewer;
+        if (selectionPane)
+            return selectionPane.viewer;
+        else {
+            console.log(this.viewers);
+            return this.viewers.index(0);
+        }
     },
 }

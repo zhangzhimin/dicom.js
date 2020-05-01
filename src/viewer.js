@@ -68,7 +68,6 @@ DICOM.Viewer.prototype.render = function() {
                     viewer.container.clientWidth, viewer.container.clientHeight);
             });
 
-            console.log(window.devicePixelRatio);
             self.renderer.setPixelRatio(window.devicePixelRatio);
             self.container.appendChild(self.renderer.domElement);
 
