@@ -1,7 +1,8 @@
 DICOM.MouseBehaviors = DICOM.MouseBehaviors || {};
 
-DICOM.MouseBehaviors.PanBehavior = function(button) {
+DICOM.MouseBehaviors.PanBehavior = function(button, global) {
     this.button = button;
+    this.global = global;
     this.cursor = 'move';
 };
 
@@ -17,6 +18,13 @@ DICOM.MouseBehaviors.PanBehavior.prototype.onAttach = function() {
     this._captureMousemove = function(e) {
         self.pane.scene.position.y += e.cameraPositionDelta.y;
         self.pane.scene.position.x += e.cameraPositionDelta.x;
+
+        if (self.global) {
+            self.pane.viewer.panes.each(function(pane) {
+                pane.scene.position.x = self.pane.scene.position.x;
+                pane.scene.position.y = self.pane.scene.position.y;
+            });
+        }
     };
     this.addEventListener('capturedMousemove', this._captureMousemove);
 };

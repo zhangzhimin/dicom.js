@@ -26,14 +26,17 @@ DICOM.MouseBehaviors.PageBehavior.prototype.onAttach = function() {
             return;
         }
 
-        var onlyCurrentPane = true;
-        if (onlyCurrentPane) {
-            index = index < 0 ? 0 : index;
-            var max = self.pane.viewer.dcmSeries.imageWrappers.length - 1;
-            index = index > max ? max : index;
-            self.pane.state.frameIndex.value = index;
-        } else {
-        }
+        console.log('hitted');
+
+        index = index < 0 ? 0 : index;
+        var max = self.pane.viewer.dcmSeries.imageWrappers.length - 1;
+        index = index > max ? max : index;
+
+        self.pane.viewer.panes.each(function(pane) {
+            pane.state.frameIndex.value = index + (pane.id - self.pane.id);
+        });
+
+        // self.pane.state.frameIndex.value = index;
     };
     this.addEventListener('capturedMousemove', this._captureMousemove);
 };

@@ -175,22 +175,6 @@ DICOM.Pane.prototype.getImageHeight = function() {
     return this.image.row * this.image.pixelSpacingY;
 };
 
-DICOM.Pane.prototype.getImageValue = function(pos) {
-    var nx = pos.x / this.getImageWidth();
-    var ny = pos.y / this.getImageHeight();
-
-    if (nx < 0 || nx >= this.getImageWidth() || ny < 0 || ny >= this.getImageHeight()) {
-        return undefined;
-    }
-
-    var column = this.image.column;
-    var row = this.image.row;
-    var x = Math.round(nx * column);
-    var y = Math.round(ny * row);
-    var offset = column * y + x;
-    return this.pixelBuffer[offset];
-};
-
 DICOM.Pane.prototype._getCameraSize = function() {
     var rect = this.getRect();
     var imageWidth = this.getImageWidth();

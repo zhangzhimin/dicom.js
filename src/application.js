@@ -55,7 +55,6 @@ DICOM.Application.prototype = {
     createViewer: function(container, id) {
         var viewer = this.viewerFactory.createViewer(container);
         this.viewers.add(viewer);
-        viewer.split(1, 1);
 
         viewer.addEventListener('loadedDcmSeries', function(e) {
             viewer.panes.each(function(pane) {

@@ -100,29 +100,26 @@ DICOM.Viewer.prototype.split = function(column, row) {
     var viewerWidth = self.container.clientWidth;
     var viewerHeight = self.container.clientHeight;
 
-    var customEvent = {type: 'split', oldPanes: this.panes};
+    var customEvent = {type: 'split'};
 
     this.panes.clear();
-    var grid = DICOM.generateGrid(viewerWidth, viewerHeight, column, row, function(port) {
+
+    DICOM.generateGrid(viewerWidth, viewerHeight, column, row, function(port) {
         var pane = new DICOM.Pane(port.left, port.bottom, port.width, port.height);
+        pane.id = port.id;
         self.panes.add(pane);
 
-        if (self.paneBuilder) {
-            self.paneBuilder(pane);
-        } else {
-            pane.addEventListener('loaded', function() {
-                var topOverlay = new DICOM.Overlays.TopOverlay();
-                pane.overlays.add(topOverlay);
-                var cornerInfoOverlay = new DICOM.Overlays.CornerInfoOverlay();
-                pane.overlays.add(cornerInfoOverlay);
-                // var scaleOverlay = new DICOM.Overlays.ScaleOverlay();
-                // pane.overlays.add(scaleOverlay);
-                var shapeOverlay = new DICOM.Overlays.ShapeOverlay();
-                pane.overlays.add(shapeOverlay);
-            });
-        }
+        pane.addEventListener('loaded', function() {
+            var topOverlay = new DICOM.Overlays.TopOverlay();
+            pane.overlays.add(topOverlay);
+            var cornerInfoOverlay = new DICOM.Overlays.CornerInfoOverlay();
+            pane.overlays.add(cornerInfoOverlay);
+            // var scaleOverlay = new DICOM.Overlays.ScaleOverlay();
+            // pane.overlays.add(scaleOverlay);
+            var shapeOverlay = new DICOM.Overlays.ShapeOverlay();
+            pane.overlays.add(shapeOverlay);
+        });
     });
 
-    customEvent.newPanes = this.panes;
     this.dispatchEvent(customEvent);
 };

@@ -12,7 +12,6 @@ DICOM.Overlays.ScaleOverlay.prototype.onAttach = function() {
     this._refresh = function() {
         self.refreshScaleRuler();
     };
-    this.pane.addEventListener('zoom', this._refresh);
     this.pane.addEventListener('sizeChanged', this._refresh);
 };
 

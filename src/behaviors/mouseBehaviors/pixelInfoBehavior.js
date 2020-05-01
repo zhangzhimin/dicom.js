@@ -22,13 +22,29 @@ DICOM.MouseBehaviors.PixelBehavior.prototype.onAttach = function() {
 
     cornerOverlay.leftBottomCorner.appendChild(pixelLi);
 
+    var pane = self.pane;
     this._mousemove = function(e) {
-        var domPos = self.pane.getDomPosition(e);
-        var cameraPos = self.pane.getCameraPosition(domPos);
-        var scenePos = self.pane.getScenePosition(cameraPos);
-        var imagePos = self.pane.getImagePosition(scenePos);
+        var domPos = pane.getDomPosition(e);
+        var cameraPos = pane.getCameraPosition(domPos);
+        var scenePos = pane.getScenePosition(cameraPos);
 
-        pixelLi.innerHTML = 'Hu: ' + (self.pane.getImageValue(imagePos) || 'NaN');
+        // the position has bug
+        var imagePos = pane.getImagePosition(scenePos);
+
+        // console.log({dom: domPos, camera: cameraPos, scene: scenePos, image: imagePos});
+
+        var nx = imagePos.x / pane.getImageWidth();
+        var ny = imagePos.y / pane.getImageHeight();
+
+        var value = null;
+        if (nx >= 0 && nx < pane.getImageWidth() && ny >= 0 && ny < pane.getImageHeight()) {
+            var x = Math.round(nx * pane.image.column);
+            var y = Math.round(ny * pane.image.row);
+            var offset = pane.image.column * y + x;
+            value = pane.image.pixelBufferFloat32[offset];
+        }
+
+        pixelLi.innerHTML = 'Hu: ' + (value || 'NaN');
     };
     this.pane.container.addEventListener('mousemove', this._mousemove);
 

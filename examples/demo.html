@@ -48,8 +48,6 @@
 	<script src="../src/overlays/scaleOverlay.js"></script>
 	<script src="../src/overlays/shapeOverlay.js"></script>
 	<script src="../src/overlays/topOverlay.js"></script>
-	<script src="../src/application.js"></script>
-	<script src="../src/viewerFactory.js"></script>
 
 	<style>
 		#container {
@@ -88,8 +86,8 @@
 
 <body>
 	<div id="toolbar">
-		<button id="default">Default</button>
-		<button id="wwwl">WWWL</button>
+		<!-- <button id="default">Default</button> -->
+		<!-- <button id="wwwl">WWWL</button> -->
 		<button id="pan">Pan</button>
 		<button id="zoom">Zoom</button>
 		<button id="page">Page</button>
@@ -103,18 +101,13 @@
 		<button id='split1'>1X1</button>
 		<button id='setWL'>SetWL</button>
 		<button id='setWL1'>SetWL1</button>
-		<button id='setWL2'>SetWL2</button>
 	</div>
 
 	<div id="container"></div>
 
 
 	<script>
-		var application = new DICOM.Application();
 		var viewer = new DICOM.Viewer("container");
-		//  viewer.split(1,1);
-
-		viewer.split(1, 1);
 
 		viewer.addEventListener('loadedDcmSeries', function (e) {
 			viewer.panes.each(function (pane) {
@@ -122,79 +115,102 @@
 			});
 		});
 
-		viewer.addEventListener('split', function (e) {
+		viewer.addEventListener('split', function () {
 			if (viewer.dcmSeries) {
 				viewer.panes.each(function (pane) {
 					pane.loadDcmSeries(viewer.dcmSeries);
+
+					//设置默认的交互行为
+					pane.behaviors.add(new DICOM.MouseBehaviors.WheelPageBehavior());
+					pane.behaviors.add(new DICOM.MouseBehaviors.WWWLBehavior('right'));
+					pane.behaviors.add(new DICOM.MouseBehaviors.PageBehavior('left'));
 				});
 			}
 		});
 
-		// application.viewers.add(viewer);
-
-		//实际使用中需要需要当application准备好了，再是按键enable.
-		document.querySelector("#default").onclick = function (e) {
-			application.behaviorID.value = 'default';
-		};
-
-		document.querySelector("#wwwl").onclick = function (e) {
-			application.behaviorID.value = 'WWWL';
-		};
+		viewer.split(1, 1);
 
 		document.querySelector("#pan").onclick = function (e) {
-			application.behaviorID.value = 'pan';
+			viewer.panes.each(function (pane) {
+				pane.behaviors.clear();
+				//全局生效
+				pane.behaviors.add(new DICOM.MouseBehaviors.PanBehavior('left', true));
+			});
 		};
 
 		document.querySelector("#zoom").onclick = function (e) {
-			application.behaviorID.value = 'zoom';
+			viewer.panes.each(function (pane) {
+				pane.behaviors.clear();
+				//选中生效
+				pane.behaviors.add(new DICOM.MouseBehaviors.ZoomBehavior('left', false));
+			});
 		};
 
 		document.querySelector("#page").onclick = function (e) {
-			application.behaviorID.value = 'page';
+			viewer.panes.each(function (pane) {
+				pane.behaviors.clear();
+				pane.behaviors.add(new DICOM.MouseBehaviors.PageBehavior('left'));
+			});
 		};
 
 		document.querySelector('#pixel').onclick = function (e) {
-			application.behaviorID.value = 'pixel';
+			viewer.panes.each(function (pane) {
+				pane.behaviors.clear();
+				pane.behaviors.add(new DICOM.MouseBehaviors.PixelBehavior('left'));
+			});
 		};
 
 		document.querySelector("#line").onclick = function (e) {
-			application.behaviorID.value = 'line';
+			viewer.panes.each(function (pane) {
+				pane.behaviors.clear();
+				pane.behaviors.add(new DICOM.MouseBehaviors.InsertLineBehavior('left'));
+			});
 		}
 
 		document.querySelector("#rotate0").onclick = function (e) {
-			application.executeByID({ type: 'rotate', arguments: Math.PI * 0.5 });
+			var cmd = new DICOM.Commands.RotateCommand(Math.PI * 0.5);
+			cmd.attach(viewer);
+			cmd.execute();
 		};
 
 		document.querySelector("#rotate1").onclick = function (e) {
-			application.executeByID({ type: 'rotate', arguments: -Math.PI * 0.5 });
+			var cmd = new DICOM.Commands.RotateCommand(Math.PI * -0.5);
+			cmd.attach(viewer);
+			cmd.execute();
 		};
 
 		document.querySelector("#flip0").onclick = function (e) {
-			application.executeByID({ type: 'flip', arguments: 'x' });
+			var cmd = new DICOM.Commands.FlipCommand('x');
+			cmd.attach(viewer);
+			cmd.execute();
 		};
 
 		document.querySelector("#flip1").onclick = function (e) {
-			application.executeByID({ type: 'flip', arguments: 'y' });
+			var cmd = new DICOM.Commands.FlipCommand('y');
+			cmd.attach(viewer);
+			cmd.execute();
 		};
 
 		document.querySelector("#split3").onclick = function (e) {
-			application.getCurrentViewer().split(3, 3);
+			viewer.split(3, 3);
 		}
 
 		document.querySelector("#split1").onclick = function (e) {
-			application.getCurrentViewer().split(1, 1);
+			viewer.split(1, 1);
 		}
 
 		document.querySelector("#setWL").onclick = function (e) {
-			application.setWWWL(400, 150);
+			viewer.panes.each(function (pane) {
+				pane.state.windowWidth.value = 400;
+				pane.state.windowLevel.value = 150;
+			});
 		}
 
 		document.querySelector("#setWL1").onclick = function (e) {
-			application.setWWWL(100, 400);
-		}
-
-		document.querySelector("#setWL2").onclick = function (e) {
-			application.setWWWL(200, 500);
+			viewer.panes.each(function (pane) {
+				pane.state.windowWidth.value = 300;
+				pane.state.windowLevel.value = 100;
+			});
 		}
 
 		var dcmSeries = new DICOM.DcmSeries();

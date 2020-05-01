@@ -5,7 +5,7 @@ DICOM.Command = function() {};
 DICOM.AttachedObject.prototype.apply(DICOM.Command.prototype);
 
 DICOM.Command.prototype.onAttach = function() {
-    this.pane = this.associatedObject;
+    this.target = this.associatedObject;
 
     // if (this.execute){
     //     this.execute();
@@ -13,7 +13,7 @@ DICOM.Command.prototype.onAttach = function() {
 };
 
 // DICOM.Command.prototype.onDetach = function(){
-//     this.pane = undefined;
+//     this.target = undefined;
 //
 //     if (this.unexecute){
 //         this.unexecute();

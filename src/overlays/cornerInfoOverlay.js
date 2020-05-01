@@ -48,19 +48,15 @@ DICOM.Overlays.CornerInfoOverlay.prototype.onAttach = function() {
     this.rightBottomCorner.style.position = 'absolute';
     this.domElement.appendChild(this.rightBottomCorner);
 
-    // this.leftSide = document.createElement("ul");
-    // this.leftSide.style.top = '50%';
-    // this.leftSide.style.right = 0;
-    // this.leftSide.style.padding = "0.5em";
-    // this.leftSide.style.margin = 0;
-    // this.leftSide.style.listStyle = "none";
-    // this.leftSide.style.position ="absolute";
-    // this.domElement.appendChild(this.leftSide);
-
-    var patientName = this.pane.viewer.dcmSeries.patientName;
     var patientLi = document.createElement('li');
-    patientLi.innerHTML = patientName;
+    patientLi.innerHTML = this.pane.image.patientName;
     this.leftTopCorner.appendChild(patientLi);
+
+    var imageNumberLi = document.createElement('li');
+    this.leftTopCorner.appendChild(imageNumberLi);
+    DICOM.observe(this.pane.state.frameIndex, function(e) {
+        imageNumberLi.innerHTML = 'Id: ' + e.newValue;
+    });
 
     var windowLevelLi = document.createElement('li');
     this.rightTopCorner.appendChild(windowLevelLi);
