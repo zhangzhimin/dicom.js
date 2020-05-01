@@ -1,8 +1,7 @@
 
 //用于布局（grid）视图里面的一个Pane， 同一个Viewer里面的Pane会共享一个Viewer
 // left ,bottom width, height is relate to the render size.
-DICOM.Pane =
-    function(left, bottom, width, height) {
+DICOM.Pane = function(left, bottom, width, height) {
     this.uuid = THREE.Math.generateUUID();
     this._renderAbled = false;
 
@@ -41,9 +40,9 @@ DICOM.Pane =
         windowWidth: {type: 'f', value: undefined},
         windowLevel: {type: 'f', value: undefined}
     };
-}
+};
 
-    DICOM.Pane.prototype = new DICOM.AttachedObject();
+DICOM.Pane.prototype = new DICOM.AttachedObject();
 DICOM.Pane.prototype.constructor = DICOM.Pane;
 
 DICOM.EventDispatcher.prototype.apply(DICOM.Pane.prototype);
@@ -175,7 +174,6 @@ DICOM.Pane.prototype.drawImage = function(image) {
         this._renderAbled = true;
         this.dispatchEvent({type: 'loaded'});
     }
-
 };
 
 DICOM.Pane.prototype.getRect = function() {

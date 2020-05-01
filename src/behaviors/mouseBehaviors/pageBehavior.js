@@ -18,18 +18,22 @@ DICOM.MouseBehaviors.PageBehavior.prototype.onAttach = function() {
         var index;
 
         // self.pane.scene.position.y += e.cameraPositionDelta.y;
-        if (e.domPositionDelta.y > 0.1)
+        if (e.domPositionDelta.y > 0.05) {
             index = self.pane.state.frameIndex.value + 1;
-        else if (e.domPositionDelta.y < -0.1) {
+        } else if (e.domPositionDelta.y < -0.05) {
             index = self.pane.state.frameIndex.value - 1;
         } else {
             return;
         }
 
-        index = index < 0 ? 0 : index;
-        var max = self.pane.viewer.dcmSeries.imageWrappers.length - 1;
-        index = index > max ? max : index;
-        self.pane.state.frameIndex.value = index;
+        var onlyCurrentPane = true;
+        if (onlyCurrentPane) {
+            index = index < 0 ? 0 : index;
+            var max = self.pane.viewer.dcmSeries.imageWrappers.length - 1;
+            index = index > max ? max : index;
+            self.pane.state.frameIndex.value = index;
+        } else {
+        }
     };
     this.addEventListener('capturedMousemove', this._captureMousemove);
 };
