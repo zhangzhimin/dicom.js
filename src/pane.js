@@ -142,29 +142,8 @@ DICOM.Pane.prototype.drawImage = function(image) {
         uniforms.windowLevel.needsUpdate = true;
     });
 
-    // var imgFactory = new dwv.image.ImageFactory();
-    // var img =
-    //     imgFactory.create(image.dicomParser.getDicomElements(),
-    //     image.dicomParser.getPixelBuffer());
-
-    // var width = this.image.column;
-    // var height = this.image.row;
-
-    // var pixelDataFloat32 = new Float32Array(width * height);
-    // for (var i = 0; i < pixelDataFloat32.length; ++i) {
-    //     pixelDataFloat32[i] = img.getValueAtOffset(i);
-    // }
-    // var frameTexture =
-    //     new THREE.DataTexture(pixelDataFloat32, width, height, THREE.LuminanceFormat,
-    //     THREE.FloatType);
-    // frameTexture.needsUpdate = true;
-
-
-
     this.uniforms.texture.value = this.image.texture;
     this.uniforms.texture.needsUpdate = true;
-
-    // this.pixelBuffer = pixelDataFloat32;
 
     if (!this._renderAbled) {
         this._renderAbled = true;

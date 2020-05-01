@@ -111,8 +111,24 @@
 
 	<script>
 		var application = new DICOM.Application();
-		var viewer = application.createViewer("container");
+		var viewer = new DICOM.Viewer("container");
 		//  viewer.split(1,1);
+
+		viewer.split(1, 1);
+
+		viewer.addEventListener('loadedDcmSeries', function (e) {
+			viewer.panes.each(function (pane) {
+				pane.loadDcmSeries(e.dcmSeries);
+			});
+		});
+
+		viewer.addEventListener('split', function (e) {
+			if (viewer.dcmSeries) {
+				viewer.panes.each(function (pane) {
+					pane.loadDcmSeries(viewer.dcmSeries);
+				});
+			}
+		});
 
 		// application.viewers.add(viewer);
 
@@ -200,7 +216,7 @@
 
 		var animate = function () {
 			requestAnimationFrame(animate);
-			application.render();
+			viewer.render();
 		}
 
 		animate();

@@ -16,8 +16,7 @@ DICOM.Overlays.ScaleOverlay.prototype.onAttach = function() {
     this.pane.addEventListener('sizeChanged', this._refresh);
 };
 
-DICOM.Overlays.ScaleOverlay.prototype.refreshScaleRuler =
-    function() {
+DICOM.Overlays.ScaleOverlay.prototype.refreshScaleRuler = function() {
     if (this.scaleRuler) {
         this.pane.scaleRulerScene.remove(this.scaleRuler);
         this.scaleRuler = undefined;
@@ -89,10 +88,9 @@ DICOM.Overlays.ScaleOverlay.prototype.refreshScaleRuler =
     //     txtSpan.style.top = (domPos.y+2) + "px";
     //     txtSpan.style.left = domPos.x + 'px';
     // });
-}
+};
 
-    DICOM.Overlays.ScaleOverlay.prototype.getScaleRulerRect =
-        function() {
+DICOM.Overlays.ScaleOverlay.prototype.getScaleRulerRect = function() {
     var clientWidth = this.pane.container.clientWidth;
     var clientHeight = this.pane.container.clientHeight;
 
@@ -108,9 +106,9 @@ DICOM.Overlays.ScaleOverlay.prototype.refreshScaleRuler =
     var rb = this.pane.getCameraPosition({x: left + width, y: top + height});
 
     return {left: lt.x, top: lt.y, width: rb.x - lt.x, height: rb.y - lt.y};
-}
+};
 
-        DICOM.Overlays.ScaleOverlay.prototype.getScaleRulerTextPosition = function() {
+DICOM.Overlays.ScaleOverlay.prototype.getScaleRulerTextPosition = function() {
     var clientWidth = this.pane.container.clientWidth;
     var clientHeight = this.pane.container.clientHeight;
 
