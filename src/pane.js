@@ -1,18 +1,13 @@
 
 //用于布局（grid）视图里面的一个Pane， 同一个Viewer里面的Pane会共享一个Viewer
-// left ,bottom width, height is relate to the render size.
-DICOM.Pane = function(left, bottom, width, height) {
+// left ,top, width, height is relate to the render size.
+DICOM.Pane = function(left, top, width, height) {
     this.uuid = THREE.Math.generateUUID();
     this._renderAbled = false;
 
-    this.left = left;
-    this.bottom = bottom;
-    this.width = width;
-    this.height = height;
-
     this.container = document.createElement('div');
     this.container.style.left = left + '%';
-    this.container.style.bottom = bottom + '%';
+    this.container.style.top = top + '%';
     this.container.style.width = width + '%';
     this.container.style.height = height + '%';
     this.container.style.position = 'absolute';

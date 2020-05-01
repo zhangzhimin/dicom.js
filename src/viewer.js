@@ -105,7 +105,7 @@ DICOM.Viewer.prototype.split = function(column, row) {
     this.panes.clear();
 
     DICOM.generateGrid(viewerWidth, viewerHeight, column, row, function(port) {
-        var pane = new DICOM.Pane(port.left, port.bottom, port.width, port.height);
+        var pane = new DICOM.Pane(port.left, port.top, port.width, port.height);
         pane.id = port.id;
         self.panes.add(pane);
 

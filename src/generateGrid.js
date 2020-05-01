@@ -6,7 +6,7 @@ DICOM.generateGrid = function(width, height, columns, rows, callback) {
     var count = 0;
     for (var i = 0; i < rows; ++i) {
         for (var j = 0; j < columns; ++j) {
-            callback({left: step1 * j, bottom: step2 * i, width: step1, height: step2, id: count});
+            callback({left: step1 * j, top: step2 * i, width: step1, height: step2, id: count});
             count++;
         }
     }
