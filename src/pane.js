@@ -127,6 +127,8 @@ DICOM.Pane.prototype.drawImage = function(image) {
     this.image = image;
     var self = this;
 
+    console.log(image);
+
     var state = this.state;
     var uniforms = this.uniforms;
 
@@ -142,33 +144,28 @@ DICOM.Pane.prototype.drawImage = function(image) {
         uniforms.windowLevel.needsUpdate = true;
     });
 
-    var imgFactory = new dwv.image.ImageFactory();
-    var img =
-        imgFactory.create(image.dicomParser.getDicomElements(), image.dicomParser.getPixelBuffer());
+    // var imgFactory = new dwv.image.ImageFactory();
+    // var img =
+    //     imgFactory.create(image.dicomParser.getDicomElements(),
+    //     image.dicomParser.getPixelBuffer());
 
-    var width = this.image.tags.Columns.value[0];
-    var height = this.image.tags.Rows.value[0];
+    // var width = this.image.column;
+    // var height = this.image.row;
 
-    var imgArray = new Float32Array(width * height);
-    for (var i = 0; i < imgArray.length; ++i) {
-        imgArray[i] = img.getValueAtOffset(i);
-    }
-    var frameTexture =
-        new THREE.DataTexture(imgArray, width, height, THREE.LuminanceFormat, THREE.FloatType);
-    frameTexture.needsUpdate = true;
+    // var imgArray = new Float32Array(width * height);
+    // for (var i = 0; i < imgArray.length; ++i) {
+    //     imgArray[i] = img.getValueAtOffset(i);
+    // }
+    // var frameTexture =
+    //     new THREE.DataTexture(imgArray, width, height, THREE.LuminanceFormat, THREE.FloatType);
+    // frameTexture.needsUpdate = true;
 
-    if (DICOM.WebGLContext.webgl.getExtension('OES_texture_float_linear')) {
-        frameTexture.minFilter = THREE.LinearFilter;
-        frameTexture.magFilter = THREE.LinearFilter;
-    } else {
-        frameTexture.minFilter = THREE.NearestFilter;
-        frameTexture.magFilter = THREE.NearestFilter;
-    }
 
-    this.uniforms.texture.value = frameTexture;
+
+    this.uniforms.texture.value = this.image.texture;
     this.uniforms.texture.needsUpdate = true;
 
-    this.pixelBuffer = imgArray;
+    // this.pixelBuffer = imgArray;
 
     if (!this._renderAbled) {
         this._renderAbled = true;
@@ -193,15 +190,11 @@ DICOM.Pane.prototype.getRect = function() {
 };
 
 DICOM.Pane.prototype.getImageWidth = function() {
-    var pixelspacingX = Number(this.image.tags.PixelSpacing.value[0]);
-
-    return this.image.tags.Columns.value[0] * pixelspacingX;
+    return this.image.column * this.image.pixelSpacingX;
 };
 
 DICOM.Pane.prototype.getImageHeight = function() {
-    var pixelspacingY = Number(this.image.tags.PixelSpacing.value[1]);
-
-    return this.image.tags.Rows.value[0] * pixelspacingY;
+    return this.image.row * this.image.pixelSpacingY;
 };
 
 DICOM.Pane.prototype.getImageValue = function(pos) {
@@ -212,8 +205,8 @@ DICOM.Pane.prototype.getImageValue = function(pos) {
         return undefined;
     }
 
-    var column = this.image.tags.Columns.value[0];
-    var row = this.image.tags.Rows.value[0];
+    var column = this.image.column;
+    var row = this.image.row;
     var x = Math.round(nx * column);
     var y = Math.round(ny * row);
     var offset = column * y + x;

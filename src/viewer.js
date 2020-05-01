@@ -58,7 +58,6 @@ DICOM.Viewer.prototype.render = function() {
 
             self.addEventListener('resize', function(e) {
                 var viewer = e.target;
-                console.log(viewer.container.clientHeight);
                 viewer.renderer.setSize(
                     viewer.container.clientWidth, viewer.container.clientHeight);
             });
@@ -68,7 +67,6 @@ DICOM.Viewer.prototype.render = function() {
 
             var viewerWidth = self.container.clientWidth;
             var viewerHeight = self.container.clientHeight;
-            console.log(viewerHeight);
             self.renderer.setSize(viewerWidth, viewerHeight);
             self.renderer.getPrecision('highh');
 
