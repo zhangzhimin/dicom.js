@@ -12,7 +12,7 @@ DICOM.DcmSeries.prototype.appendDcmArrayBuffer = function(buffer) {
         var dataset = dicomParser.parseDicom(new Uint8Array(buffer));
         imageWrapper.studyUid = dataset.string('x0020000d');
         imageWrapper.seriesUid = dataset.string('x002000e');
-        imageWrapper.imageNumber = dataset.string('x00200013');
+        imageWrapper.instanceNumber = dataset.string('x00200013');
         imageWrapper.patientName = dataset.string('x00100010');
         imageWrapper.windowLevel = Number(dataset.string('x00281050'));
         imageWrapper.windowWidth = Number(dataset.string('x00281051'));
@@ -32,8 +32,6 @@ DICOM.DcmSeries.prototype.appendDcmArrayBuffer = function(buffer) {
         for (var i = 0; i < pixelDataFloat32.length; ++i) {
             pixelDataFloat32[i] = pixelData[i];
         }
-
-        delete dataset;
 
         var frameTexture = new THREE.DataTexture(
             pixelDataFloat32, width, height, THREE.LuminanceFormat, THREE.FloatType);
@@ -56,10 +54,10 @@ DICOM.DcmSeries.prototype.appendDcmArrayBuffer = function(buffer) {
 };
 
 DICOM.DcmSeries.prototype._insertImageWrapper = function(imageWrapper) {
-    var instanceNumber = imageWrapper.imageNumber;
+    var instanceNumber = imageWrapper.instanceNumber;
     var i = 0;
     for (; i < this.imageWrappers.length; ++i) {
-        if (instanceNumber < this.imageWrappers[i].imageNumber) {
+        if (instanceNumber < this.imageWrappers[i].instanceNumber) {
             break;
         }
     }

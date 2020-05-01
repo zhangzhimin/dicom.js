@@ -29,6 +29,7 @@ DICOM.Pane = function(left, top, width, height) {
     this.state = {};
     this.state.windowWidth = new DICOM.ObservableData();
     this.state.windowLevel = new DICOM.ObservableData();
+    this.state.instanceNumber = new DICOM.ObservableData();
 
     this.uniforms = this.uniforms = {
         texture: {type: 't', value: undefined},
@@ -127,6 +128,8 @@ DICOM.Pane.prototype.drawImage = function(image) {
 
     state.windowWidth.value = state.windowWidth.value || image.windowWidth;
     state.windowLevel.value = state.windowLevel.value || image.windowLevel;
+
+    state.instanceNumber.value = image.instanceNumber;
 
     DICOM.observe(this.state.windowWidth, function(e) {
         uniforms.windowWidth.value = self.state.windowWidth.value;

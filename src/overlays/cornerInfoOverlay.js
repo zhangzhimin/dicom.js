@@ -54,8 +54,8 @@ DICOM.Overlays.CornerInfoOverlay.prototype.onAttach = function() {
 
     var imageNumberLi = document.createElement('li');
     this.leftTopCorner.appendChild(imageNumberLi);
-    DICOM.observe(this.pane.state.frameIndex, function(e) {
-        imageNumberLi.innerHTML = 'Id: ' + e.newValue;
+    DICOM.observe(this.pane.state.instanceNumber, function(e) {
+        imageNumberLi.innerHTML = 'InstanceNum: ' + e.newValue;
     });
 
     var windowLevelLi = document.createElement('li');
