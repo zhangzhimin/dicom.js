@@ -1,7 +1,8 @@
 DICOM.MouseBehaviors = DICOM.MouseBehaviors || {};
 
-DICOM.MouseBehaviors.WWWLBehavior = function(button) {
+DICOM.MouseBehaviors.WWWLBehavior = function(button, global) {
     this.button = button;
+    this.global = global;
 };
 
 
@@ -21,10 +22,15 @@ DICOM.MouseBehaviors.WWWLBehavior.prototype.onAttach = function() {
         var ww = self.pane.state.windowWidth.value + e.domPositionDelta.x * speedRatio;
         ww = ww >= 1 ? ww : 1;
 
-        self.pane.viewer.panes.each(function(pane) {
-            pane.state.windowWidth.value = ww;
-            pane.state.windowLevel.value = wl;
-        });
+        if (self.global) {
+            self.pane.viewer.panes.each(function(pane) {
+                pane.state.windowWidth.value = ww;
+                pane.state.windowLevel.value = wl;
+            });
+        } else {
+            self.pane.state.windowWidth.value = ww;
+            self.pane.state.windowLevel.value = wl;
+        }
 
         // self.pane.state.windowLevel.value +=  e.domPositionDelta.y * 3;
         // self.pane.state.windowWidth.value +=  e.domPositionDelta.x * 3;

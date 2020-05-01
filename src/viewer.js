@@ -110,6 +110,7 @@ DICOM.Viewer.prototype.split = function(column, row) {
         self.panes.add(pane);
 
         pane.addEventListener('loaded', function() {
+            // top overlay is necessary
             var topOverlay = new DICOM.Overlays.TopOverlay();
             pane.overlays.add(topOverlay);
             var cornerInfoOverlay = new DICOM.Overlays.CornerInfoOverlay();

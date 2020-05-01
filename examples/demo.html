@@ -38,11 +38,9 @@
 	<script src="../src/behaviors/touchBehaviors/WWWLBehavior.js"></script>
 	<script src="../src/behaviors/touchBehaviors/zoomBehavior.js"></script>
 	<script src="../src/behaviors/touchBehaviors/panBehavior.js"></script>
-	<script src="../src/behaviors/behaviorHelper.js"></script>
 	<script src="../src/commands/command.js"></script>
 	<script src="../src/commands/rotateCommand.js"></script>
 	<script src="../src/commands/flipCommand.js"></script>
-	<script src="../src/commands/commandHelper.js"></script>
 	<script src="../src/overlays/overlay.js"></script>
 	<script src="../src/overlays/cornerInfoOverlay.js"></script>
 	<script src="../src/overlays/scaleOverlay.js"></script>
@@ -121,8 +119,8 @@
 					pane.loadDcmSeries(viewer.dcmSeries);
 
 					//设置默认的交互行为
-					pane.behaviors.add(new DICOM.MouseBehaviors.WWWLBehavior('right'));
-					pane.behaviors.add(new DICOM.MouseBehaviors.PageBehavior('left'));
+					pane.behaviors.add(new DICOM.MouseBehaviors.WWWLBehavior('right', true));
+					pane.behaviors.add(new DICOM.MouseBehaviors.PageBehavior('left', true));
 				});
 			}
 		});
@@ -134,8 +132,8 @@
 				pane.behaviors.clear();
 				//全局生效
 				pane.behaviors.add(new DICOM.MouseBehaviors.PanBehavior('left', true));
-				//选中生效
-				pane.behaviors.add(new DICOM.MouseBehaviors.PanBehavior('left', false));
+				// //选中生效
+				// pane.behaviors.add(new DICOM.MouseBehaviors.PanBehavior('left', false));
 			});
 		};
 
@@ -150,7 +148,7 @@
 		document.querySelector("#page").onclick = function (e) {
 			viewer.panes.each(function (pane) {
 				pane.behaviors.clear();
-				pane.behaviors.add(new DICOM.MouseBehaviors.PageBehavior('left'));
+				pane.behaviors.add(new DICOM.MouseBehaviors.PageBehavior('left', true));
 			});
 		};
 

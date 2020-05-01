@@ -1,7 +1,8 @@
 DICOM.MouseBehaviors = DICOM.MouseBehaviors || {};
 
-DICOM.MouseBehaviors.PageBehavior = function(button) {
+DICOM.MouseBehaviors.PageBehavior = function(button, global) {
     this.button = button;
+    this.global = global;
 };
 
 DICOM.MouseBehaviors.PageBehavior.prototype =
@@ -32,11 +33,14 @@ DICOM.MouseBehaviors.PageBehavior.prototype.onAttach = function() {
         var max = self.pane.viewer.dcmSeries.imageWrappers.length - 1;
         index = index > max ? max : index;
 
-        self.pane.viewer.panes.each(function(pane) {
-            pane.state.frameIndex.value = index + (pane.id - self.pane.id);
-        });
+        if (self.global) {
+            self.pane.viewer.panes.each(function(pane) {
+                pane.state.frameIndex.value = index + (pane.id - self.pane.id);
+            });
+        } else {
+            self.pane.state.frameIndex.value = index;
+        }
 
-        // self.pane.state.frameIndex.value = index;
     };
     this.addEventListener('capturedMousemove', this._captureMousemove);
 };
