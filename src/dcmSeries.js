@@ -72,6 +72,7 @@ DICOM.DcmSeries.prototype.onLoadedImage = function(index, callback) {
     if (imageWrapper) {
         callback({image: imageWrapper, index: index});
     } else {
+        console.log('hitted');
         var self = this;
         var _append = function(e) {
             if (e.index != index) {

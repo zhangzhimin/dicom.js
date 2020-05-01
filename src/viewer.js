@@ -71,8 +71,6 @@ DICOM.Viewer.prototype.render = function() {
             self.renderer.setSize(viewerWidth, viewerHeight);
             self.renderer.getPrecision('highh');
 
-            // self.split(1,1);
-
             // self.stats = new Stats();
             // self.stats.setMode(0);
             // self.stats.domElement.style.position = 'absolute';
@@ -96,12 +94,12 @@ DICOM.Viewer.prototype.render = function() {
     renderImp();
 };
 
-DICOM.Viewer.prototype.split = function(column, row) {
+DICOM.Viewer.prototype.grid = function(column, row) {
     var self = this;
     var viewerWidth = self.container.clientWidth;
     var viewerHeight = self.container.clientHeight;
 
-    var customEvent = {type: 'split'};
+    var customEvent = {type: 'grid'};
 
     this.panes.clear();
 
