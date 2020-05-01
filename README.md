@@ -6,9 +6,6 @@ dicom图像的系列显示
 * [webgl](https://en.wikipedia.org/wiki/WebGL)
 如果其不支持webgl的线性插值，在放大时会有锯齿, 后面可以考虑使用half_float_texture等来减少内存的消耗
 * [typed array](https://developer.mozilla.org/en/docs/Web/JavaScript/Typed_arrays)
-typed array其有着更好的性能， 用于处理文件中的Binary数据，其作为webgl的配套组件，在支持webgl的浏览器中基本会支持typed array
-* [HTML5 FILE API](http://www.w3.org/TR/FileAPI/)
-用于上传和下载文件
 
 该库支持IE11， Edge，及较新的Chrome， Firefox， Safri的浏览器。
 
@@ -40,9 +37,7 @@ dicom.js消耗了大量的内存， 比如200M图像会消耗200*4MB的内存，
 
 ## 使用简介
 
-### Application
-
-### viewer
+### Viewer
 
 ### Pane
 
