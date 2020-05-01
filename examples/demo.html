@@ -107,12 +107,6 @@
 	<script>
 		var viewer = new DICOM.Viewer("container");
 
-		viewer.addEventListener('loadedDcmSeries', function (e) {
-			viewer.panes.each(function (pane) {
-				pane.loadDcmSeries(e.dcmSeries);
-			});
-		});
-
 		viewer.addEventListener('split', function () {
 			if (viewer.dcmSeries) {
 				viewer.panes.each(function (pane) {

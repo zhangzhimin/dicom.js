@@ -41,8 +41,9 @@ DICOM.EventDispatcher.prototype.apply(DICOM.Viewer.prototype);
 
 DICOM.Viewer.prototype.loadDcmSeries = function(dcmSeries) {
     this.dcmSeries = dcmSeries;
-
-    this.dispatchEvent({type: 'loadedDcmSeries', dcmSeries: dcmSeries});
+    this.panes.each(function(pane) {
+        pane.loadDcmSeries(dcmSeries);
+    });
 };
 
 //渲染Viewer， 调用此函数后Viewer开始渲染

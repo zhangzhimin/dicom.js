@@ -74,7 +74,8 @@ DICOM.DcmSeries.prototype.onLoadedImage = function(index, callback) {
     if (imageWrapper) {
         callback({image: imageWrapper, index: index});
     } else {
-        this.addEventListener('append', function(e) {
+        var self = this;
+        var _append = function(e) {
             if (e.index != index) {
                 return;
             }
@@ -84,7 +85,8 @@ DICOM.DcmSeries.prototype.onLoadedImage = function(index, callback) {
                 callback({image: img, index: index});
             }
 
-            return;
-        });
+            self.removeEventListener('append', _append);
+        };
+        this.addEventListener('append', _append);
     }
 };

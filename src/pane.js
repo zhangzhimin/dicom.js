@@ -247,15 +247,3 @@ DICOM.Pane.prototype.convertCameraPositionToDomPosition = function(cameraPos) {
 
     return {x: domWidth * nx, y: domHeight * ny};
 };
-
-DICOM.bindDcmSeriesToPane = function(dcmSeries, pane) {
-    pane.dcmSeries = dcmSeries;
-    pane.state.frameIndex = new DICOM.ObservableData(0);
-
-    DICOM.observe(pane.state.frameIndex, function(e) {
-        var index = e.newValue;
-        dcmSeries.onLoadedImage(index, function(e) {
-            pane.drawImage(e.image);
-        });
-    });
-};
