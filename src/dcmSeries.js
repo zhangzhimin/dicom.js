@@ -9,34 +9,34 @@ DICOM.EventDispatcher.prototype.apply(DICOM.DcmSeries.prototype);
 DICOM.DcmSeries.prototype.appendDcmArrayBuffer = function(buffer) {
     try {
         var imageWrapper = {};
-        dicomParser = new dwv.dicom.DicomParser();
-        dicomParser.parse(buffer);
+        var dataset = dicomParser.parseDicom(new Uint8Array(buffer));
+        imageWrapper.studyUid = dataset.string('x0020000d');
+        imageWrapper.seriesUid = dataset.string('x002000e');
+        imageWrapper.imageNumber = dataset.string('x00200013');
+        imageWrapper.patientName = dataset.string('x00100010');
+        imageWrapper.windowLevel = Number(dataset.string('x00281050'));
+        imageWrapper.windowWidth = Number(dataset.string('x00281051'));
 
-        // var dataSet = dicomParser.parseDicom(new Uint8Array(buffer));
-        // console.log('study id', dataSet.string('x0020000d'));
+        pixelSpacings = dataset.string('x00280030').split('\\');
+        imageWrapper.pixelSpacingX = Number(pixelSpacings[0]);
+        imageWrapper.pixelSpacingY = Number(pixelSpacings[1]);
+        imageWrapper.row = dataset.uint16('x00280010');
+        imageWrapper.column = dataset.uint16('x00280011');
 
+        var pixelDataElement = dataset.elements.x7fe00010;
+        var pixelData = new Int16Array(dataset.byteArray.buffer, pixelDataElement.dataOffset);
 
-        var tags = dicomParser.getDicomElements();
-        // imageWrapper.tags = tags;
-        imageWrapper.windowLevel = Number(tags.WindowCenter.value[0]);
-        imageWrapper.windowWidth = Number(tags.WindowWidth.value[0]);
-        imageWrapper.patientName = Number(tags.PatientName.value[0]);
-        imageWrapper.row = Number(tags.Rows.value[0]);
-        imageWrapper.column = Number(tags.Columns.value[0]);
-        imageWrapper.pixelSpacingX = Number(tags.PixelSpacing.value[0]);
-        imageWrapper.pixelSpacingY = Number(tags.PixelSpacing.value[1]);
-        imageWrapper.imageNumber = tags.ImageNumber.value[0];
-
-        var imgFactory = new dwv.image.ImageFactory();
-        var img = imgFactory.create(dicomParser.getDicomElements(), dicomParser.getPixelBuffer());
         var width = imageWrapper.column;
         var height = imageWrapper.row;
-        var imgArray = new Float32Array(width * height);
-        for (var i = 0; i < imgArray.length; ++i) {
-            imgArray[i] = img.getValueAtOffset(i);
+        var pixelDataFloat32 = new Float32Array(width * height);
+        for (var i = 0; i < pixelDataFloat32.length; ++i) {
+            pixelDataFloat32[i] = pixelData[i];
         }
-        var frameTexture =
-            new THREE.DataTexture(imgArray, width, height, THREE.LuminanceFormat, THREE.FloatType);
+
+        delete dataset;
+
+        var frameTexture = new THREE.DataTexture(
+            pixelDataFloat32, width, height, THREE.LuminanceFormat, THREE.FloatType);
         frameTexture.needsUpdate = true;
         if (DICOM.WebGLContext.webgl.getExtension('OES_texture_float_linear')) {
             frameTexture.minFilter = THREE.LinearFilter;
@@ -46,14 +46,9 @@ DICOM.DcmSeries.prototype.appendDcmArrayBuffer = function(buffer) {
             frameTexture.magFilter = THREE.NearestFilter;
         }
         imageWrapper.texture = frameTexture;
-        imageWrapper.pixelBufferFloat32 = imgArray;
-
-        img = null;
-        delete imgFactory;
-        delete dicomParser;
+        imageWrapper.pixelBufferFloat32 = pixelDataFloat32;
 
         var insertedIndex = this._insertImageWrapper(imageWrapper);
-
         this.dispatchEvent({type: 'append', message: imageWrapper, index: insertedIndex});
     } catch (ex) {
         console.error('faield to add dicom array buffer', ex);

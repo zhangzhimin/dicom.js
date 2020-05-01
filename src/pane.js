@@ -127,8 +127,6 @@ DICOM.Pane.prototype.drawImage = function(image) {
     this.image = image;
     var self = this;
 
-    console.log(image);
-
     var state = this.state;
     var uniforms = this.uniforms;
 
@@ -152,12 +150,13 @@ DICOM.Pane.prototype.drawImage = function(image) {
     // var width = this.image.column;
     // var height = this.image.row;
 
-    // var imgArray = new Float32Array(width * height);
-    // for (var i = 0; i < imgArray.length; ++i) {
-    //     imgArray[i] = img.getValueAtOffset(i);
+    // var pixelDataFloat32 = new Float32Array(width * height);
+    // for (var i = 0; i < pixelDataFloat32.length; ++i) {
+    //     pixelDataFloat32[i] = img.getValueAtOffset(i);
     // }
     // var frameTexture =
-    //     new THREE.DataTexture(imgArray, width, height, THREE.LuminanceFormat, THREE.FloatType);
+    //     new THREE.DataTexture(pixelDataFloat32, width, height, THREE.LuminanceFormat,
+    //     THREE.FloatType);
     // frameTexture.needsUpdate = true;
 
 
@@ -165,7 +164,7 @@ DICOM.Pane.prototype.drawImage = function(image) {
     this.uniforms.texture.value = this.image.texture;
     this.uniforms.texture.needsUpdate = true;
 
-    // this.pixelBuffer = imgArray;
+    // this.pixelBuffer = pixelDataFloat32;
 
     if (!this._renderAbled) {
         this._renderAbled = true;
