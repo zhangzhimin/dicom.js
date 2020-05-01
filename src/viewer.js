@@ -114,8 +114,8 @@ DICOM.Viewer.prototype.split = function(column, row) {
             pane.overlays.add(topOverlay);
             var cornerInfoOverlay = new DICOM.Overlays.CornerInfoOverlay();
             pane.overlays.add(cornerInfoOverlay);
-            // var scaleOverlay = new DICOM.Overlays.ScaleOverlay();
-            // pane.overlays.add(scaleOverlay);
+            var scaleOverlay = new DICOM.Overlays.ScaleOverlay();
+            pane.overlays.add(scaleOverlay);
             var shapeOverlay = new DICOM.Overlays.ShapeOverlay();
             pane.overlays.add(shapeOverlay);
         });

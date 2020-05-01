@@ -23,8 +23,8 @@ DICOM.Overlays.ScaleOverlay.prototype.refreshScaleRuler = function() {
     }
 
     var self = this;
-    var pixelspacingX = this.pane.imageWrapper.pixelSpacingX;
-    var pixelspacingY = this.pane.imageWrapper.pixelSpacingY;
+    var pixelspacingX = this.pane.image.pixelSpacingX;
+    var pixelspacingY = this.pane.image.pixelSpacingY;
     if (pixelspacingX != pixelspacingY) {
         //应该设置显示时的参数， 以支持不规则的图次昂
         console.log('Error: the pixelspacing is not same.');
@@ -34,7 +34,7 @@ DICOM.Overlays.ScaleOverlay.prototype.refreshScaleRuler = function() {
 
     var tenMM = 10;
 
-    var material = new THREE.LineBasicMaterial({color: 0xffff00});
+    var material = new THREE.LineBasicMaterial({color: 0x00ff00});
 
     var scaleRect = this.getScaleRulerRect();
 
@@ -66,7 +66,7 @@ DICOM.Overlays.ScaleOverlay.prototype.refreshScaleRuler = function() {
     this.scaleRuler.scale.x = scale;
     this.pane.scaleRulerScene.add(scaleRuler);
 
-    // this.pane.addEventListener("zoom", function(e){
+    // this.pane.addEventListener('sizeChange', function(e) {
     //     self.scaleRuler.scale.x = self.pane.scene.scale.x;
     // });
 
@@ -79,7 +79,7 @@ DICOM.Overlays.ScaleOverlay.prototype.refreshScaleRuler = function() {
     txtSpan.style.position = 'absolute';
     txtSpan.style.top = txtPos.top + 'px';
     txtSpan.style.left = txtPos.left + 'px';
-    txtSpan.style.color = 'yellow';
+    txtSpan.style.color = 'green';
     this.domElement.appendChild(txtSpan);
 
     // this.pane.addEventListener('sizeChanged', function(){

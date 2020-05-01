@@ -24,13 +24,13 @@ DICOM.MouseBehaviors.ZoomBehavior.prototype.onAttach = function() {
 
         self.pane.scene.scale.x *= (1 + e.domPositionDelta.y * 0.01);
         self.pane.scene.scale.y *= (1 + e.domPositionDelta.y * 0.01);
-        self.pane.dispatchEvent({type: 'sizeChange'});
+        self.pane.dispatchEvent({type: 'sizeChanged'});
 
         if (self.global) {
             self.pane.viewer.panes.each(function(pane) {
                 pane.scene.scale.x = self.pane.scene.scale.x;
                 pane.scene.scale.y = self.pane.scene.scale.y;
-                pane.dispatchEvent({type: 'sizeChange'});
+                pane.dispatchEvent({type: 'sizeChanged'});
             });
         }
     };
