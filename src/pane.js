@@ -90,9 +90,6 @@ DICOM.Pane.prototype.loadDcmSeries = function(dcmSeries) {
     });
 
     this.state.frameIndex.value = this.id;
-
-
-    this.dispatchEvent({type: 'loadedDcmSeries', dcmSeries: dcmSeries});
 };
 
 DICOM.Pane.prototype.initializeBy = function(imagePrototype) {
