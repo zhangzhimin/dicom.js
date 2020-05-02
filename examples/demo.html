@@ -78,8 +78,6 @@
 
 		button {
 			padding: 0;
-			/* height: 3em; */
-
 			width: 6em;
 			margin: 0;
 		}
@@ -88,8 +86,6 @@
 
 <body>
 	<div id="toolbar">
-		<!-- <button id="default">Default</button> -->
-		<!-- <button id="wwwl">WWWL</button> -->
 		<button id="wwwl">ww/wl</button>
 		<button id="pan">Pan</button>
 		<button id="zoom">Zoom</button>
@@ -100,25 +96,27 @@
 		<button id="rotate1">Rotate1</button>
 		<button id="flip0">Flip0</button>
 		<button id="flip1">Flip1</button>
-		<button id='split3'>3X3</button>
-		<button id='split1'>1X1</button>
+		<button id='grid3x3'>container</button>
+		<button id='grid1x1'>1X1</button>
 		<button id='setWL'>SetWL</button>
 		<button id='setWL1'>SetWL1</button>
 	</div>
 
+	<!-- 用作viewer的容器，需要设定位置尺寸 -->
 	<div id="container"></div>
-
 
 	<script>
 		document.querySelector("#wwwl").onclick = function (e) {
 			viewer.panes.each(function (pane) {
 				pane.behaviors.clear();
+				//left表示鼠标左键， true表示作用于该viewer里的所有panes
 				pane.behaviors.add(new DICOM.MouseBehaviors.WWWLBehavior('left', true));
 			});
 		}
 
 		document.querySelector("#pan").onclick = function (e) {
 			viewer.panes.each(function (pane) {
+				//将所有行为删除， 该操作删除了原有的交互行为
 				pane.behaviors.clear();
 				//全局生效
 				pane.behaviors.add(new DICOM.MouseBehaviors.PanBehavior('left', true));
@@ -180,11 +178,11 @@
 			cmd.execute();
 		};
 
-		document.querySelector("#split3").onclick = function (e) {
+		document.querySelector("#grid3x3").onclick = function (e) {
 			viewer.layoutGrid(3, 3);
 		}
 
-		document.querySelector("#split1").onclick = function (e) {
+		document.querySelector("#grid1x1").onclick = function (e) {
 			viewer.layoutGrid(1, 1);
 		}
 
@@ -204,8 +202,9 @@
 
 		//container为div的id， div需要设置好位置，大小
 		var viewer = new DICOM.Viewer("container");
-		//3x3的布局
+		//设置viewer的布局为3x3
 		viewer.layoutGrid(3, 3);
+
 		//加载dcm图像
 		for (var i = 350; i <= 450; ++i) {
 			var url = "../data/0000000039/400001.2/CT.1.2.392.200036.9116.2.1221418485.1277952568.885215.2." + i + ".dcm";
@@ -214,6 +213,7 @@
 			request.responseType = "arraybuffer";
 
 			request.onload = function (event) {
+				//往viewer的dcm序列中添加图像
 				viewer.dcmSeries.appendDcmArrayBuffer(this.response);
 			}
 
