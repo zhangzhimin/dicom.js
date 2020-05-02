@@ -32,18 +32,20 @@ DICOM.Viewer = function(container, options) {
     };
 
     self.init = false;
+
+    this.dcmSeries = new DICOM.DcmSeries();
 };
 
 DICOM.AttachedObject.prototype.apply(DICOM.Viewer.prototype);
 
 DICOM.EventDispatcher.prototype.apply(DICOM.Viewer.prototype);
 
-DICOM.Viewer.prototype.loadDcmSeries = function(dcmSeries) {
-    this.dcmSeries = dcmSeries;
-    this.panes.each(function(pane) {
-        pane.loadDcmSeries(dcmSeries);
-    });
-};
+// DICOM.Viewer.prototype.loadDcmSeries = function(dcmSeries) {
+//     this.dcmSeries = dcmSeries;
+//     this.panes.each(function(pane) {
+//         pane.loadDcmSeries(dcmSeries);
+//     });
+// };
 
 //渲染Viewer， 调用此函数后Viewer开始渲染
 DICOM.Viewer.prototype.render = function() {
@@ -105,7 +107,6 @@ DICOM.Viewer.prototype.layoutGrid = function(column, row) {
     DICOM.generateGrid(viewerWidth, viewerHeight, column, row, function(port) {
         var pane = new DICOM.Pane(port.left, port.top, port.width, port.height);
         pane.id = port.id;
-        self.panes.add(pane);
 
         pane.addEventListener('loaded', function() {
             // top overlay is necessary
@@ -122,6 +123,8 @@ DICOM.Viewer.prototype.layoutGrid = function(column, row) {
             pane.behaviors.add(new DICOM.MouseBehaviors.WWWLBehavior('right', true));
             pane.behaviors.add(new DICOM.MouseBehaviors.PageBehavior('left', true));
         });
+
+        self.panes.add(pane);
     });
 
     this.dispatchEvent(customEvent);

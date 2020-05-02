@@ -17,34 +17,33 @@ DICOM.MouseBehaviors.PixelBehavior.prototype.onAttach = function() {
         return overlay instanceof DICOM.Overlays.CornerInfoOverlay;
     });
 
-    var pixelLi = this.pixelLi = document.createElement('li');
+    var pixelLi = document.createElement('li');
+    this.pixelLi = pixelLi;
     pixelLi.innerHTML = 'Hu: NaN';
 
     cornerOverlay.leftBottomCorner.appendChild(pixelLi);
+
+
 
     var pane = self.pane;
     this._mousemove = function(e) {
         var domPos = pane.getDomPosition(e);
         var cameraPos = pane.getCameraPosition(domPos);
         var scenePos = pane.getScenePosition(cameraPos);
-
-        // the position has bug
-        var imagePos = pane.getImagePosition(scenePos);
-
-        // console.log({dom: domPos, camera: cameraPos, scene: scenePos, image: imagePos});
-
-        var nx = imagePos.x / pane.getImageWidth();
-        var ny = imagePos.y / pane.getImageHeight();
+        //获取在数据中的坐标
+        var memPos = pane.getImageMemPos(scenePos);
 
         var value = null;
-        if (nx >= 0 && nx < pane.getImageWidth() && ny >= 0 && ny < pane.getImageHeight()) {
-            var x = Math.round(nx * pane.image.column);
-            var y = Math.round(ny * pane.image.row);
-            var offset = pane.image.column * y + x;
+        if (memPos.x >= 0 && memPos.x < pane.image.column && memPos.y >= 0 &&
+            memPos.y < pane.image.row) {
+            var offset = pane.image.column * memPos.y + memPos.x;
             value = pane.image.pixelBufferFloat32[offset];
         }
 
         pixelLi.innerHTML = 'Hu: ' + (value || 'NaN');
+        // pixelLi.innerHTML = 'dom ' + JSON.stringify(domPos) + ' camera ' +
+        //     JSON.stringify(cameraPos) + ' scene ' + JSON.stringify(scenePos) + ' mem ' +
+        //     JSON.stringify(memPos);
     };
     this.pane.container.addEventListener('mousemove', this._mousemove);
 

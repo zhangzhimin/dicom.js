@@ -43,9 +43,8 @@ DICOM.MouseBehaviors.InsertLineBehavior.prototype.onAttach = function() {
         self.line.endPoint = new THREE.Vector3(e.scenePosition.x, e.scenePosition.y, 10);
         // self.line.bugWalkaround();
 
-        var startImgPos =
-            new THREE.Vector2().copy(self.pane.getImagePosition(self.line.startPoint));
-        var endImgPos = new THREE.Vector2().copy(self.pane.getImagePosition(self.line.endPoint));
+        var startImgPos = new THREE.Vector2().copy(self.pane.getImageMemPos(self.line.startPoint));
+        var endImgPos = new THREE.Vector2().copy(self.pane.getImageMemPos(self.line.endPoint));
         var length = endImgPos.sub(startImgPos).length();
 
         e.originalEvent.preventDefault();

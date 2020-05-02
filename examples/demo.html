@@ -86,6 +86,7 @@
 	<div id="toolbar">
 		<!-- <button id="default">Default</button> -->
 		<!-- <button id="wwwl">WWWL</button> -->
+		<button id="wwwl">ww/wl</button>
 		<button id="pan">Pan</button>
 		<button id="zoom">Zoom</button>
 		<button id="page">Page</button>
@@ -105,17 +106,12 @@
 
 
 	<script>
-		var viewer = new DICOM.Viewer("container");
-
-		viewer.addEventListener('layoutChanged', function () {
+		document.querySelector("#wwwl").onclick = function (e) {
 			viewer.panes.each(function (pane) {
-				if (viewer.dcmSeries) {
-					pane.loadDcmSeries(viewer.dcmSeries);
-				}
+				pane.behaviors.clear();
+				pane.behaviors.add(new DICOM.MouseBehaviors.WWWLBehavior('left', true));
 			});
-		});
-
-		viewer.layoutGrid(3, 3);
+		}
 
 		document.querySelector("#pan").onclick = function (e) {
 			viewer.panes.each(function (pane) {
@@ -202,10 +198,11 @@
 			});
 		}
 
-		var dcmSeries = new DICOM.DcmSeries();
-		viewer.loadDcmSeries(dcmSeries);
-
-		var init = false;
+		//container为div的id， div需要设置好位置，大小
+		var viewer = new DICOM.Viewer("container");
+		//3x3的布局
+		viewer.layoutGrid(3, 3);
+		//加载dcm图像
 		for (var i = 281; i <= 560; ++i) {
 			var url = "../data/0000000039/400001.2/CT.1.2.392.200036.9116.2.1221418485.1277952568.885215.2." + i + ".dcm";
 			var request = new XMLHttpRequest();
@@ -213,17 +210,17 @@
 			request.responseType = "arraybuffer";
 
 			request.onload = function (event) {
-				dcmSeries.appendDcmArrayBuffer(this.response);
+				viewer.dcmSeries.appendDcmArrayBuffer(this.response);
 			}
 
 			request.send(null);
 		}
 
+		//持续渲染，必须
 		var animate = function () {
 			requestAnimationFrame(animate);
 			viewer.render();
 		}
-
 		animate();
 	</script>
 

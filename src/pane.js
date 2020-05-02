@@ -63,6 +63,8 @@ DICOM.Pane.prototype.onAttach = function() {
         self.dispatchEvent({type: 'sizeChanged'});
     };
 
+    this._loadDcmSeries(this.viewer.dcmSeries);
+
     this.viewer.addEventListener('sizeChanged', this._onresize);
 };
 
@@ -74,7 +76,7 @@ DICOM.Pane.prototype.onDetach = function() {
 };
 
 
-DICOM.Pane.prototype.loadDcmSeries = function(dcmSeries) {
+DICOM.Pane.prototype._loadDcmSeries = function(dcmSeries) {
     this.dcmSeries = dcmSeries;
     this.state.frameIndex = new DICOM.ObservableData(0);
 
@@ -85,17 +87,18 @@ DICOM.Pane.prototype.loadDcmSeries = function(dcmSeries) {
     DICOM.observe(self.state.frameIndex, function(e) {
         var index = e.newValue;
         dcmSeries.onLoadedImage(index, function(e) {
-            self.drawImage(e.image);
+            self._drawImage(e.image);
         });
     });
 
     this.state.frameIndex.value = this.id;
 };
 
-DICOM.Pane.prototype.initializeBy = function(imagePrototype) {
+DICOM.Pane.prototype._initializeByImage = function(imagePrototype) {
     this.image = imagePrototype;
 
-    var geometry = new THREE.PlaneBufferGeometry(this.getImageWidth(), this.getImageHeight());
+    var geometry =
+        new THREE.PlaneBufferGeometry(this.getImagePhysicalWidth(), this.getImagePhysicalHeight());
     var cameraSize = this._getCameraSize();
     this.camera = new THREE.OrthographicCamera(
         cameraSize.width / -2, cameraSize.width / 2, cameraSize.height / 2, cameraSize.height / -2,
@@ -114,9 +117,9 @@ DICOM.Pane.prototype.initializeBy = function(imagePrototype) {
     this.scaleRulerScene = new THREE.Scene();
 };
 
-DICOM.Pane.prototype.drawImage = function(image) {
+DICOM.Pane.prototype._drawImage = function(image) {
     if (!this._renderAbled) {
-        this.initializeBy(image);
+        this._initializeByImage(image);
         this.dispatchEvent({type: 'loaded'});
     }
 
@@ -149,7 +152,8 @@ DICOM.Pane.prototype.drawImage = function(image) {
     }
 };
 
-DICOM.Pane.prototype.getRect = function() {
+
+DICOM.Pane.prototype.getContainerRect = function() {
     var left = this.container.offsetLeft;
     var width = this.container.offsetWidth;
     var height = this.container.offsetHeight;
@@ -165,18 +169,18 @@ DICOM.Pane.prototype.getRect = function() {
     }
 };
 
-DICOM.Pane.prototype.getImageWidth = function() {
+DICOM.Pane.prototype.getImagePhysicalWidth = function() {
     return this.image.column * this.image.pixelSpacingX;
 };
 
-DICOM.Pane.prototype.getImageHeight = function() {
+DICOM.Pane.prototype.getImagePhysicalHeight = function() {
     return this.image.row * this.image.pixelSpacingY;
 };
 
 DICOM.Pane.prototype._getCameraSize = function() {
-    var rect = this.getRect();
-    var imageWidth = this.getImageWidth();
-    var imageHeight = this.getImageHeight();
+    var rect = this.getContainerRect();
+    var imageWidth = this.getImagePhysicalWidth();
+    var imageHeight = this.getImagePhysicalHeight();
     var cameraWidth, cameraHeight;
     var ratio = imageWidth / imageHeight;
     var paneRatio = rect.width / rect.height;
@@ -196,7 +200,7 @@ DICOM.Pane.prototype.render = function() {
         return;
     }
 
-    var rect = this.getRect();
+    var rect = this.getContainerRect();
 
     this.viewer.renderer.setViewport(rect.left, rect.bottom, rect.width, rect.height);
     this.viewer.renderer.setScissor(rect.left, rect.bottom, rect.width, rect.height);
@@ -208,8 +212,8 @@ DICOM.Pane.prototype.render = function() {
     this.viewer.renderer.render(this.scaleRulerScene, this.camera);
 };
 
-// CameraPosition是和Image图像一样的尺寸, 但坐标适合this.scene一致，
-// ImagePosition一般为左上角 输入为鼠标点击在该Dom元素上的位置
+// CameraPosition是和Container的比例一样， 其最小边是和Image的物理尺寸一致,
+// 但坐标是和this.scene一致， ImagePosition一般为左上角 输入为鼠标点击在该Dom元素上的位置
 DICOM.Pane.prototype.getCameraPosition = function(domPos) {
     var domWidth = this.container.clientWidth;
     var domHeight = this.container.clientHeight;
@@ -222,10 +226,12 @@ DICOM.Pane.prototype.getCameraPosition = function(domPos) {
     return {x: sceneX, y: sceneY};
 };
 
+// 返回鼠标基于container的坐标
 DICOM.Pane.prototype.getDomPosition = function(e) {
     return mousePositionElement(e, this.container)
 };
 
+// scene坐标
 DICOM.Pane.prototype.getScenePosition = function(cameraPos) {
     var tmp = new THREE.Vector4(cameraPos.x, cameraPos.y, 0, 1);
     var inMatrixWorld = new THREE.Matrix4();
@@ -234,11 +240,12 @@ DICOM.Pane.prototype.getScenePosition = function(cameraPos) {
     return {x: tmp.x, y: tmp.y};
 };
 
-DICOM.Pane.prototype.getImagePosition = function(scenePos) {
-    return {
-        x: scenePos.x + 0.5 * this.getImageWidth(),
-        y: -scenePos.y + 0.5 * this.getImageHeight()
-    };
+DICOM.Pane.prototype.getImageMemPos = function(scenePos) {
+    var x = (0.5 + scenePos.x / this.getImagePhysicalWidth()) * this.image.column;
+    var y = (0.5 - scenePos.y / this.getImagePhysicalHeight()) * this.image.row;
+
+    return {x: Math.round(x), y: Math.round(y)};
+
 };
 
 DICOM.Pane.prototype.convertCameraPositionToDomPosition = function(cameraPos) {
