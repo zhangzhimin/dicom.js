@@ -44,7 +44,6 @@ DICOM.Pane.prototype.constructor = DICOM.Pane;
 DICOM.EventDispatcher.prototype.apply(DICOM.Pane.prototype);
 
 DICOM.Pane.prototype.onAttach = function() {
-
     this.viewer = this.associatedObject;
     this.viewer.container.appendChild(this.container);
 
@@ -80,19 +79,18 @@ DICOM.Pane.prototype.loadDcmSeries = function(dcmSeries) {
     this.state.frameIndex = new DICOM.ObservableData(0);
 
     var self = this;
-
     //利用第一张图像来初始化Pane的各种设置
-    dcmSeries.onLoadedImage(0, function(e) {
-        //
-        self.initializeBy(e.image);
-        //激活翻页功能
-        DICOM.observe(self.state.frameIndex, function(e) {
-            var index = e.newValue;
-            dcmSeries.onLoadedImage(index, function(e) {
-                self.drawImage(e.image);
-            });
+
+    //激活翻页功能
+    DICOM.observe(self.state.frameIndex, function(e) {
+        var index = e.newValue;
+        dcmSeries.onLoadedImage(index, function(e) {
+            self.drawImage(e.image);
         });
     });
+
+    this.state.frameIndex.value = this.id;
+
 
     this.dispatchEvent({type: 'loadedDcmSeries', dcmSeries: dcmSeries});
 };
@@ -120,6 +118,10 @@ DICOM.Pane.prototype.initializeBy = function(imagePrototype) {
 };
 
 DICOM.Pane.prototype.drawImage = function(image) {
+    if (!this._renderAbled) {
+        this.initializeBy(image);
+    }
+
     this.image = image;
     var self = this;
 

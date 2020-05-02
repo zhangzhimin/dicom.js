@@ -10,7 +10,6 @@ DICOM.Viewer = function(container, options) {
     }
 
     this.options = options || {};
-    // this.options.mode = this.options.mode || 'debug';
 
     this.container = container;
     //防止滚动条干扰canvas的尺寸
