@@ -76,3 +76,8 @@ Viewer是我们的最外层组件, 其管理dicom图像和Panes
 ### Overlay
 
 overlay目前主要在pane中使用, pane默认会添加topoverlay以响应鼠标事件, 除此之外还有其他的多种overlay
+
+## 合作交流
+
+邮箱: p3.1415@qq.com
+微信: zhangzhimin-tju
