@@ -108,15 +108,11 @@
 		var viewer = new DICOM.Viewer("container");
 
 		viewer.addEventListener('layoutChanged', function () {
-			if (viewer.dcmSeries) {
-				viewer.panes.each(function (pane) {
+			viewer.panes.each(function (pane) {
+				if (viewer.dcmSeries) {
 					pane.loadDcmSeries(viewer.dcmSeries);
-
-					//设置默认的交互行为
-					pane.behaviors.add(new DICOM.MouseBehaviors.WWWLBehavior('right', true));
-					pane.behaviors.add(new DICOM.MouseBehaviors.PageBehavior('left', true));
-				});
-			}
+				}
+			});
 		});
 
 		viewer.layoutGrid(3, 3);
@@ -222,8 +218,6 @@
 
 			request.send(null);
 		}
-
-		viewer.layoutGrid(1, 1);
 
 		var animate = function () {
 			requestAnimationFrame(animate);

@@ -117,6 +117,10 @@ DICOM.Viewer.prototype.layoutGrid = function(column, row) {
             pane.overlays.add(scaleOverlay);
             var shapeOverlay = new DICOM.Overlays.ShapeOverlay();
             pane.overlays.add(shapeOverlay);
+
+            //设置默认的交互行为
+            pane.behaviors.add(new DICOM.MouseBehaviors.WWWLBehavior('right', true));
+            pane.behaviors.add(new DICOM.MouseBehaviors.PageBehavior('left', true));
         });
     });
 
