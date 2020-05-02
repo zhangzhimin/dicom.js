@@ -23,7 +23,7 @@ DICOM.Viewer = function(container, options) {
 
     var self = this;
     window.addEventListener('resize', function() {
-        var e = {type: 'resize'};
+        var e = {type: 'sizeChanged'};
         self.dispatchEvent(e);
     });
 
@@ -56,7 +56,7 @@ DICOM.Viewer.prototype.render = function() {
             self.renderer = new THREE.WebGLRenderer({antialias: true});
             self.renderer.autoClear = false;
 
-            self.addEventListener('resize', function(e) {
+            self.addEventListener('sizeChanged', function(e) {
                 var viewer = e.target;
                 viewer.renderer.setSize(
                     viewer.container.clientWidth, viewer.container.clientHeight);

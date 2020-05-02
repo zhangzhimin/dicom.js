@@ -40,8 +40,12 @@ dicom.js消耗了大量的内存， 比如200M图像会消耗200*4MB的内存，
 ### Viewer
 
 * layoutChanged 当执行layoutGrid操作后，会响应该事件
+* sizeChanged 当viewer的div发生改变时， 直接使用了window的resize事件触发，暂未考虑其他的sizeChanged方式
 
 ### Pane
+
+* loaded 事件， Pane的threejs已经初始化完成，可以渲染
+* sizeChanged 当pane的size发生改变和进行缩放时触发
 
 ### Behavior
 

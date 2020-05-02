@@ -63,12 +63,12 @@ DICOM.Pane.prototype.onAttach = function() {
         self.dispatchEvent({type: 'sizeChanged'});
     };
 
-    this.viewer.addEventListener('resize', this._onresize);
+    this.viewer.addEventListener('sizeChanged', this._onresize);
 };
 
 DICOM.Pane.prototype.onDetach = function() {
     this.viewer.container.removeChild(this.container);
-    this.viewer.removeEventListener('resize', this._onresize);
+    this.viewer.removeEventListener('sizeChanged', this._onresize);
 
     this.viewer = undefined;
 };
@@ -117,6 +117,7 @@ DICOM.Pane.prototype.initializeBy = function(imagePrototype) {
 DICOM.Pane.prototype.drawImage = function(image) {
     if (!this._renderAbled) {
         this.initializeBy(image);
+        this.dispatchEvent({type: 'loaded'});
     }
 
     this.image = image;
