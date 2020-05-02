@@ -107,7 +107,7 @@
 	<script>
 		var viewer = new DICOM.Viewer("container");
 
-		viewer.addEventListener('grid', function () {
+		viewer.addEventListener('layoutChanged', function () {
 			if (viewer.dcmSeries) {
 				viewer.panes.each(function (pane) {
 					pane.loadDcmSeries(viewer.dcmSeries);
@@ -119,7 +119,7 @@
 			}
 		});
 
-		viewer.grid(3, 3);
+		viewer.layoutGrid(3, 3);
 
 		document.querySelector("#pan").onclick = function (e) {
 			viewer.panes.each(function (pane) {
@@ -185,11 +185,11 @@
 		};
 
 		document.querySelector("#split3").onclick = function (e) {
-			viewer.grid(3, 3);
+			viewer.layoutGrid(3, 3);
 		}
 
 		document.querySelector("#split1").onclick = function (e) {
-			viewer.grid(1, 1);
+			viewer.layoutGrid(1, 1);
 		}
 
 		document.querySelector("#setWL").onclick = function (e) {
@@ -223,7 +223,7 @@
 			request.send(null);
 		}
 
-		viewer.grid(1, 1);
+		viewer.layoutGrid(1, 1);
 
 		var animate = function () {
 			requestAnimationFrame(animate);

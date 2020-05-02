@@ -93,12 +93,12 @@ DICOM.Viewer.prototype.render = function() {
     renderImp();
 };
 
-DICOM.Viewer.prototype.grid = function(column, row) {
+DICOM.Viewer.prototype.layoutGrid = function(column, row) {
     var self = this;
     var viewerWidth = self.container.clientWidth;
     var viewerHeight = self.container.clientHeight;
 
-    var customEvent = {type: 'grid'};
+    var customEvent = {type: 'layoutChanged'};
 
     this.panes.clear();
 

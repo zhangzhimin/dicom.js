@@ -39,6 +39,8 @@ dicom.js消耗了大量的内存， 比如200M图像会消耗200*4MB的内存，
 
 ### Viewer
 
+* layoutChanged 当执行layoutGrid操作后，会响应该事件
+
 ### Pane
 
 ### Behavior
