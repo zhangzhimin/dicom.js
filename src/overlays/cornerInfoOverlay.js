@@ -61,13 +61,15 @@ DICOM.Overlays.CornerInfoOverlay.prototype.onAttach = function() {
     var windowLevelLi = document.createElement('li');
     this.rightTopCorner.appendChild(windowLevelLi);
     DICOM.observe(this.pane.state.windowLevel, function(e) {
-        windowLevelLi.innerHTML = 'WL: ' + e.newValue;
+        if (!e.newValue) return;
+        windowLevelLi.innerHTML = 'WL: ' + e.newValue.toFixed(0);
     });
 
     var windowWidthLi = document.createElement('li');
     this.rightTopCorner.appendChild(windowWidthLi);
     DICOM.observe(this.pane.state.windowWidth, function(e) {
-        windowWidthLi.innerHTML = 'WW: ' + e.newValue;
+        if (!e.newValue) return;
+        windowWidthLi.innerHTML = 'WW: ' + e.newValue.toFixed(0);
     });
 };
 
