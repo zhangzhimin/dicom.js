@@ -29,16 +29,12 @@ src/behaviors/mouseBehaviors/pixelInfoBehavior.js \
 src/behaviors/touchBehaviors/WWWLBehavior.js \
 src/behaviors/touchBehaviors/zoomBehavior.js \
 src/behaviors/touchBehaviors/panBehavior.js \
-src/behaviors/behaviorHelper.js \
 src/commands/command.js \
 src/commands/rotateCommand.js \
 src/commands/flipCommand.js \
-src/commands/commandHelper.js \
 src/overlays/overlay.js \
 src/overlays/cornerInfoOverlay.js \
 src/overlays/scaleOverlay.js \
 src/overlays/shapeOverlay.js \
 src/overlays/topOverlay.js \
-src/application.js \
-src/viewerFactory.js \
 -o libs/dicom.min.js

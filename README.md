@@ -20,7 +20,7 @@ three.js库是一个webgl的渲染库， 我们使用了其来渲染图形和图
 ## Build
 build.bat会生成libs/dicom.min.js文件，如果使用OSX或者linux平台，则对应做下处理，需要安装nodejs后用
 ```
-npm install -g unglifyjs
+npm install uglify-js -g
 ```
 安装uglifyjs组件，可github搜索uglifyjs了解因为项目里面又加入了新文件， 在最终发布时， 重新编写build.bat文件生成正确的dicom.min.js文件。
 
