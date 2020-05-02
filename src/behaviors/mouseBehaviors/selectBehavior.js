@@ -15,16 +15,11 @@ DICOM.MouseBehaviors.SelectBehavior.prototype.onAttach = function() {
 
     var self = this;
     this.pane.addEventListener('selected', function() {
-        // self.pane.border.material.color = new THREE.Color(1.0,0.0,0.0);
         self.pane.borderDiv.style.border = '1px solid red';
-        // self.pane.container.style.zIndex = "1000";
     });
 
     this.pane.addEventListener('unselected', function() {
-        // self.pane.border.material.color = new THREE.Color(1,1,1);
         self.pane.borderDiv.style.border = '1px solid yellow';
-        // self.pane.container.style.zIndex = "1";
-
     });
 
     this._mousedown = function(e) {

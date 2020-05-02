@@ -11,6 +11,8 @@ DICOM.Viewer = function(container, options) {
 
     this.options = options || {};
 
+    this.selectedPane = new DICOM.Selection();
+
     this.container = container;
     //防止滚动条干扰canvas的尺寸
     this.container.style.overflow = 'hidden';
@@ -122,7 +124,7 @@ DICOM.Viewer.prototype.layoutGrid = function(column, row) {
             //设置默认的交互行为
             pane.behaviors.add(new DICOM.MouseBehaviors.WWWLBehavior('right', true));
             pane.behaviors.add(new DICOM.MouseBehaviors.PageBehavior('left', true));
-
+            pane.behaviors.add(new DICOM.MouseBehaviors.SelectBehavior(self.selectedPane));
             pane.behaviors.add(new DICOM.TouchBehaviors.WWWLBehavior(true));
         });
 
