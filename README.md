@@ -28,24 +28,16 @@ three.js库是一个webgl的渲染库, 我们使用了其来渲染图形和图�
 用于在build时拼接压缩js文件, 该组件仅build时依赖. 
 * [dicom.js](https://coding.net/u/matazure/p/dicom.js)即本项目自己生成的
 
-## 生成
-
-安装uglify-js, 使用gen_min_dicomjs.sh生成libs/dicom.min.js文件
-
-```bash
-npm install uglify-js -g
-```
-
 ## 示例
 
-项目中加入了nodejs的静态资源部署模块, 可下载安装nodejs后在dicom.js目录下执行：
+examples/demo.html是一个很好的示例，拥有丰富的鼠标交互行为，触摸行为只实现了一个，后期会不断增加
 
-```bash
-npm install
-node server.js
+```javascript
+//container为div的id， div需要设置好位置，大小
+var viewer = new DICOM.Viewer("container");
+//设置viewer的布局为3x3
+viewer.layoutGrid(3, 3);
 ```
-
-通过<http://localhost:3000/examples/demo.html>即可查看示例, 示例依赖图像, 需要适配你自己dicom图像数据
 
 ## 结构说明
 
