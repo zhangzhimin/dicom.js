@@ -1,6 +1,6 @@
 # Dicom.js
 
-基于dicom系列2D显示序列
+A Dicom Viewer Based On  WebGL
 
 ## 功能
 
