@@ -2,6 +2,8 @@
 
 A Dicom Viewer Based On  WebGL
 
+![](http://dicomjs.matazure.com/dicomjs/demo.JPG)
+
 ## 功能
 
 基于WebGL的高效2D绘制引擎, 已经支持一下功能
